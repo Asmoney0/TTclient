@@ -6102,15 +6102,25 @@ function aG5() {
 	window.addEventListener("error", function aG7(cc) {
 		aG6 = "";
 		try {
-			var aG8 = function(cc) {
+			var ce, aG8 = function(cc) {
 				if (!cc.error) return 0;
 				var stack = cc.error.stack;
 				if (!stack || !stack.length) return 0;
 				for (var match, aGG = new RegExp(":([0-9]+):([0-9]+)", "g"), result = []; null !== (match = aGG.exec(stack));) result.push(parseInt(match[1], 10)), result.push(parseInt(match[2], 10));
 				return result.length ? result.join(" ") : 0
 			}(cc);
-			return 0 === aG8 || cc.lineno <= 3 ? void console.log("Error: External Code | " + aG8) : (window.removeEventListener("error", aG7), aG6 = cc.lineno + " " + cc.colno + "|" + aG8, __fx.reportError(cc, aG6), alert("Error:\n" + cc
-				.filename + " " + cc.lineno + " " + cc.colno + " " + cc.message))
+			if (0 === aG8 || cc.lineno <= 3) return void console.log("Error: External Code | " + aG8);
+			if (window.removeEventListener("error", aG7), aG6 = cc.lineno + " " + cc.colno + "|" + aG8, performance.memory && ((ce = []).push(Math.floor(performance.memory.jsHeapSizeLimit / 1e5)), ce.push(Math.floor(performance.memory
+					.totalJSHeapSize / 1e5)), ce.push(Math.floor(performance.memory.usedJSHeapSize / 1e5)), aG6 = aG6 + "|" + ce.join(" ")), aG6 = (aG6 = aW ? aG6 + "|R" + aW.aS + "," + aW.aY + "," + aW.eB.toFixed(2) : aG6) + "|" + cc
+				.message, lh && 1 === lh.aGA) {
+				if (aG6 = lh.aGB + "|" + aGC.a9b.join(",") + "|" + aG6, cc.lineno < 43) return void aGD();
+				var hU = "What happened? Please send us a detailed email to davidtschacher@gmail.com so we can fix this error.";
+				hU += "<br>Error Message: " + aG6, aGC.a9o(), dx.ej(4, 5, new x9("🤖 Beep Boop! An error occurred.", hU, !0, [new eG("Close", function() {
+					dx.eX(), dx.fH.a9r()
+				}), new eG("Reload", function() {
+					aT.aU.a9p()
+				})]))
+			}
 		} catch (cc) {
 			aG6 = "SE|" + aG6 + "|" + cc, console.log(aG6), alert(aG6)
 		}
@@ -10963,11 +10973,9 @@ function aI8() {
 			dx.ej(1)
 		})]))
 	}), new eG(L(476), function() {
-		dx.ej(4, 1, new x9(L(476), lh.og + "<br>" + jZ.fH.xG("/changelog") + "<br><br><lh>FX Client v" + __fx.version +
-			"<br><a href='https://discord.gg/dyxcwdNKwK' target='_blank'>FX Client Discord server</a><br><a href='https://github.com/fxclient/FXclient' target='_blank'>Github repository</a></lh>", !0, [new eG("⬅️ " + L(22),
-				function() {
-					dx.ej(1)
-				})]))
+		dx.ej(4, 1, new x9(L(476), lh.og + "<br>" + jZ.fH.xG("/changelog"), !0, [new eG("⬅️ " + L(22), function() {
+			dx.ej(1)
+		})]))
 	}), new eG(L(477), function() {
 		dx.ej(4, 1, new x9(L(477), L(484) + "<br>" + L(485), !1, [new eG("⬅️ " + L(22), function() {
 			dx.ej(1)
@@ -11509,8 +11517,8 @@ function aJo() {
 function aIA() {
 	var aar, aas, a71, kF, aat, aNT = 0;
 	this.aKK = new a3m, a71 = new n8([.45, .27], [.5, .5], 2 / 3), aas = [new eG("⚔️<br>" + L(517), function() {
-			__fx.isCustomLobbyVersion ? alert("This version is for use with custom lobbies only. For normal multiplayer, use the version at https://fxclient.github.io/FXclient/") : aau(0)
-		}, __fx.isCustomLobbyVersion ? "rgba(50, 50, 50, 0.6)" : v.aSK), new eG("🗡️<br>" + L(518), function() {
+			aau(0)
+		}, v.aSK), new eG("🗡️<br>" + L(518), function() {
 			aau(1)
 		}, v.a3u), new eG("🔑<br>" + L(519), function() {
 			aau(2)
@@ -11832,11 +11840,11 @@ function a8i() {
 		vm = 2e4,
 		abF = 0;
 	this.b8 = function() {
-		bc.iV < vm || (vm = bc.iV + 1e4, 0 !== aT.id) || abE || vo.vp() || (jZ.fH.lZ(0) ? __fx.settings.hidePropagandaPopup || __fx.customLobby.isActive() || jZ.rs.vV(5) : vm = bc.iV + 1e3)
+		bc.iV < vm || (vm = bc.iV + 1e4, 0 !== aT.id) || abE || vo.vp() || (jZ.fH.lZ(0) ? jZ.rs.vV(5) : vm = bc.iV + 1e3)
 	}, this.iu = function(cY) {
 		abE = cY
 	}, this.show = function() {
-		return !(!abE || bc.iV < abF) && (__fx.settings.hidePropagandaPopup || __fx.customLobby.isActive() ? void 0 : (abF = bc.iV + 6e4, (new a8t).show(abE.rW, abE.colors, abE.id), !(abE = null)))
+		return !!abE && !(bc.iV < abF || (abF = bc.iV + 6e4, (new a8t).show(abE.rW, abE.colors, abE.id), abE = null))
 	}
 }
 
