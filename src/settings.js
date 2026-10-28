@@ -1,3 +1,6 @@
+import versionData from '../version.json';
+const { version, lastUpdated, isSignificant } = versionData;
+
 import { KeybindsInput } from "./keybindsInput.js";
 import winCounter from "./winCounter.js";
 import WindowManager from "./windowManager.js";
