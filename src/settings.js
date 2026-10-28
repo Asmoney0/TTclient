@@ -21,7 +21,6 @@ var settings = {
   attackPercentageKeybinds: [],
   startingPercentageEnabled: false,
   startingPercentage: 50,
-  hidePropagandaPopup: false,
   showReplayTimebar: true
 };
 __fx.settings = settings;
@@ -238,11 +237,6 @@ const settingsManager = new (function () {
       label: "Colored density",
       note: "Display the density with a color between red and green depending on the density value",
     },
-    {
-      for: "hidePropagandaPopup",
-      type: "checkbox",
-      label: "Hide propaganda popup"
-    },
     KeybindsInput,
     {
       for: "keybindButtons", type: "checkbox",
@@ -259,7 +253,7 @@ const settingsManager = new (function () {
       const versionInfo = document.createElement("p");
       versionInfo.innerText = `TT Client v${versionData.version}`;
       const links = document.createElement("p");
-      links.innerHTML = `<a href="https://github.com/Asmoney0/TTclient>Github Repository</a> |
+      links.innerHTML = `<a href="https://github.com/Asmoney0/TTclient">Github Repository</a> |
         <a href="https://github.com/fxclient/FXclient#readme">Original FX Repository</a>`;
       container.append(versionInfo, links);
     }
