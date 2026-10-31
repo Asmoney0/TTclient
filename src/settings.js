@@ -17,10 +17,11 @@ var settings = {
   showPlayerDensity: true,
   coloredDensity: true,
   densityDisplayStyle: "absoluteQuotient",
-  keybindButtons: false,
+  keybindButtons: true,
   attackPercentageKeybinds: [],
-  startingPercentageEnabled: false,
-  startingPercentage: 50,
+  startingPercentageEnabled: true,
+  startingPercentage: 28.2,
+  hidePropagandaPopup: true,
   showReplayTimebar: true
 };
 __fx.settings = settings;
