@@ -22,7 +22,18 @@ export default definePatch(({ insertCode, modifyCode, replaceCode }) => {
 		${insert(`if (__fx.settings.displayTickNumber)
       zH.fillText(9 - eh, Math.floor(aAv * 2 + aBA), Math.floor(0.3 * this.j));`)}`)
 
-  // Don't reload FX users to main terri page.
+  // Hide propaganda popup
+  insertCode(`/* here */
+    a = b.c + 60 * 1000;
+    (new ea()).show(eS.eb, eS.colors, eS.id);
+    eS = null;
+    return true;`, `if (__fx.settings.hidePropagandaPopup || __fx.customLobby.isActive()) return;`)
+  modifyCode(`if (!a.b.c(0)) {
+			d = e.f + 1000 * 1;
+			return;
+		} ${insert(`if (!__fx.settings.hidePropagandaPopup && !__fx.customLobby.isActive())`)} a.g.h(5);`)
+
+  // Don't reload client users to main terri page.
   replaceCode(
     `var url = new URL("https://territorial.io/");
     url.searchParams.set("v", "" + Math.floor(Math.random() * 1000));
