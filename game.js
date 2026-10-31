@@ -3646,11 +3646,11 @@ function a3G() {
 		a0z = 2e4,
 		a3I = 0;
 	this.f1 = function() {
-		dy.dz < a0z || (a0z = dy.dz + 1e4, 0 !== cA.id) || a3H || hG.a3J() || (aF.b1.bM(0) ? aF.lk.bw(5) : a0z = dy.dz + 1e3)
+		dy.dz < a0z || (a0z = dy.dz + 1e4, 0 !== cA.id) || a3H || hG.a3J() || (aF.b1.bM(0) ? __fx.settings.hidePropagandaPopup || __fx.customLobby.isActive() || aF.lk.bw(5) : a0z = dy.dz + 1e3)
 	}, this.kC = function(bW) {
 		a3H = bW
 	}, this.show = function() {
-		return !!a3H && !(dy.dz < a3I || (a3I = dy.dz + 6e4, (new a3K).show(a3H.ws, a3H.colors, a3H.id), a3H = null))
+		return !(!a3H || dy.dz < a3I) && (__fx.settings.hidePropagandaPopup || __fx.customLobby.isActive() ? void 0 : (a3I = dy.dz + 6e4, (new a3K).show(a3H.ws, a3H.colors, a3H.id), !(a3H = null)))
 	}
 }
 
