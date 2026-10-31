@@ -19,6 +19,22 @@ function persist(replays) {
   }
 }
 
+function downloadReplay(replayData, timestamp) {
+  try {
+    const blob = new Blob([replayData], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `replay_${timestamp}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  } catch (error) {
+    console.warn("Failed to download replay:", error);
+  }
+}
+
 function save(replayData) {
   if (!replayData) return;
   const replays = load();
@@ -26,6 +42,9 @@ function save(replayData) {
   if (replays.length && replays[replays.length - 1].data === replayData) return;
   replays.push({ data: replayData, timestamp: Date.now() });
   while (replays.length > MAX_REPLAYS) replays.shift();
+  const timestamp = Date.now();
+  replays.push({ data: replayData, timestamp });
+  downloadReplay(replayData, timestamp);
   persist(replays);
 }
 
