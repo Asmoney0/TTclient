@@ -1,4 +1,4 @@
-.vscode
 node_modules
 game
 build
+upload.bat
