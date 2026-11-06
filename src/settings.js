@@ -69,8 +69,6 @@ function StartingPercentageInput(container) {
   const label = document.createElement("label");
   label.className = "checkbox";
   label.append("Custom starting attack percentage ");
-  const note = document.createElement("small");
-  note.innerText = "Sets a fixed attack percentage for the troop bar at the start of every game.";
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
   const checkmark = document.createElement("span");
@@ -138,7 +136,7 @@ function createCheckboxRow(labelText, note) {
 
 function ReplayHistoryList(container) {
   const title = document.createElement("p");
-  title.innerHTML = "<b>Saved Replays</b> (auto-saves your last 5 games)";
+  title.innerHTML = "<b>Saved Replays</b>";
   container.append(title);
 
   const list = document.createElement("div");
@@ -204,7 +202,6 @@ const settingsManager = new (function () {
       for: "displayWinCounter",
       type: "checkbox",
       label: "Display win counter",
-      note: "The win counter tracks multiplayer solo wins (not in team games)",
     },
     {
       type: "button",
@@ -214,48 +211,42 @@ const settingsManager = new (function () {
     {
       for: "displayTickNumber",
       type: "checkbox",
-      label: "Display tick number near the balance",
     },
     {
       for: "useFullscreenMode",
       type: "checkbox",
       label: "Use fullscreen mode",
-      note: "Note: fullscreen mode will trigger after you click anywhere on the page due to browser policy restrictions.",
     },
     {
       for: "hoveringTooltip",
       type: "checkbox",
       label: "Hovering tooltip",
-      note: "Display map territory info constantly (on mouse hover) instead of only when right clicking on the map",
     },
     {
       for: "showPlayerDensity",
       type: "checkbox",
-      label: "Show player density",
     },
     {
       for: "coloredDensity",
       type: "checkbox",
       label: "Colored density",
-      note: "Display the density with a color between red and green depending on the density value",
     },
     KeybindsInput,
     {
-      for: "keybindButtons", type: "checkbox",
-      label: "Keybind buttons", note: "Show keybind buttons above the troop selector (max 6)"
+      for: "keybindButtons",
+      type: "checkbox",
+      label: "Keybind buttons",
     },
     StartingPercentageInput,
     {
       for: "showReplayTimebar",
       type: "checkbox",
       label: "Replay timebar",
-      note: "Show a seek bar when watching replays, allowing you to skip to any point of the replay. Seeking backward re-simulates the replay from the start, which can take a few seconds.",
     },
     {
       for: "autoDownloadReplays",
       type: "checkbox",
       label: "Auto-download replays",
-      note: "Download each replay to your computer when a game ends. Turn off if you only want replays saved in the browser.",
     },
     ReplayHistoryList,
     function Footer(container) {
