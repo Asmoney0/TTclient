@@ -73,7 +73,7 @@ function StartingPercentageInput(container) {
   checkbox.type = "checkbox";
   const checkmark = document.createElement("span");
   checkmark.className = "checkmark";
-  label.append(document.createElement("br"), note, checkbox, checkmark);
+  label.append(document.createElement("br"), checkbox, checkmark);
   container.append(label, document.createElement("br"));
 
   const inputRow = document.createElement("div");
@@ -117,15 +117,10 @@ function SectionHeader(text) {
   };
 }
 
-function createCheckboxRow(labelText, note) {
+function createCheckboxRow(labelText) {
   const label = document.createElement("label");
   label.className = "checkbox";
   label.append(labelText + " ");
-  if (note) {
-    const noteElement = document.createElement("small");
-    noteElement.innerText = note;
-    label.append(document.createElement("br"), noteElement);
-  }
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
   const checkmark = document.createElement("span");
@@ -285,11 +280,6 @@ const settingsManager = new (function () {
     if (item.text) element.innerText = item.text;
     if (item.action) element.addEventListener("click", item.action);
     if (item.label) label.append(item.label + " ");
-    if (item.note) {
-      const note = document.createElement("small");
-      note.innerText = item.note;
-      label.append(document.createElement("br"), note);
-    }
     if (item.options)
       item.options.forEach((option) => {
         const optionElement = document.createElement("option");
