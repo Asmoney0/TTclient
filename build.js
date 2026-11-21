@@ -14,6 +14,7 @@ import ModUtils, { minifyCode, tryParseGameVersion } from './modUtils.js';
 
 if (!fs.existsSync("./build")) fs.mkdirSync("./build");
 fs.cpSync("./static/", "./build/", { recursive: true });
+fs.cpSync("./assets/", "./build/assets/", { recursive: true });
 const buildTimestamp = Date.now().toString();
 fs.writeFileSync("./build/index.html", fs.readFileSync("./build/index.html").toString().replace(/buildTimestamp/g, buildTimestamp));
 fs.writeFileSync("./build/sw2.js", fs.readFileSync("./build/sw2.js").toString().replace("buildTimestamp", buildTimestamp));
@@ -67,7 +68,6 @@ async function patchGameCode() {
 	script = script.replace(/\bS\[(\d+)\]/g, (_match, index) => `"${stringArray[index]}"`);
 
 	const modUtils = new ModUtils(minifyCode(script))
-	const gameVersion = tryParseGameVersion(modUtils)
 	const v = tryParseGameVersion(modUtils)
 	fs.writeFileSync("./build/version.txt", v === null ? "unknown" : `${v.game} ${v.protocol}`)
 
@@ -78,7 +78,7 @@ async function patchGameCode() {
 			str = __L(/* Player: {0} */ [b0.context.truncateAndFillText(playerData.rawPlayerNames[player], b0.qZ.sN(0, 10), 150)]) + "   ";
 			str += __L(/* Strength: {10} */ [b0.rY.formatNumber(playerData.playerBalances[player])]) + "   ";
 			str += __L(/* Territory: {10} */ [b0.rY.formatNumber(playerData.playerTerritories[player])]) + "   ";
-		`, addToDictionary: ["game", "gIsReplay", "playerData", "rawPlayerNames", "playerBalances", "playerTerritories"]
+		`, addToDictionary: ["game", "gIsReplay", "gIsObserver", "playerData", "rawPlayerNames", "playerBalances", "playerTerritories"]
 	}, {
 		code: `this.a = Math.floor(0.066 * b.c);
 			d = b.d - 4 * uiSizes.gap - this.a;`,
@@ -173,6 +173,7 @@ async function patchGameCode() {
 		"indent_empty_lines": false
 	});
 
+	if (/[ᐅᐊ]/.test(script)) throw new Error("Name markers were left in game.js");
 	fs.writeFileSync("./build/game.js", script);
 	console.log("Wrote ./build/game.js");
 }
