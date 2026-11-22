@@ -7706,22 +7706,28 @@ function ck() {
 	function aQT(aC, fontSize, fs, fu, io) {
 		var ___id = aC;
 		var showName = aC < aE.l4 || !__fx.settings.hideBotNames;
+		var eliminationEstimate = __fx.settings.showEstimatedEliminationAttack ?
+			__fx.utils.getEstimatedEliminationAttack(___id, ah.hn[___id] - ah.a7c[___id]) :
+			"";
 		if (showName) io.fillText(ah.a2T[aC], fs, fu), aC < aE.l4 && 2 !== ah.a7T[aC] || (aC = fontSize / aPl[aC], io.fillRect(fs - .5 * aC, fu + bD.tc.a32 * fontSize, aC, Math.max(1, .1 * fontSize)));
 		aQ8 && __fx.settings.showPlayerDensity && (
 			__fx.settings.coloredDensity && (io.fillStyle = __fx.utils.textStyleBasedOnDensity(___id)),
-			io.fillText(__fx.utils.getDensity(___id), fs, showName ? fu + fontSize : fu)
+			io.fillText(__fx.utils.getDensity(___id), fs, showName ? fu + fontSize : fu),
+			eliminationEstimate && io.fillText(eliminationEstimate, fs, showName ? fu + 2 * fontSize : fu + fontSize)
 		);
 	}
 
 	function aQS(io, aC, fontSize, aQM, aQN, aQO) {
-		var a7c = ah.a7c[aC],
+		var em, a7c = ah.a7c[aC],
 			aQY = bD.pa.a3I(ah.hn[aC] - a7c);
 
 		function drawDensity() {
-			!aQ8 && __fx.settings.showPlayerDensity && (__fx.settings.coloredDensity && (io.fillStyle = __fx.utils.textStyleBasedOnDensity(aC)), io.fillText(__fx.utils.getDensity(aC), aQM, aQN + fontSize))
+			var eliminationEstimate;
+			!aQ8 && __fx.settings.showPlayerDensity && (__fx.settings.coloredDensity && (io.fillStyle = __fx.utils.textStyleBasedOnDensity(aC)), io.fillText(__fx.utils.getDensity(aC), aQM, aQN + fontSize), eliminationEstimate = __fx.settings
+				.showEstimatedEliminationAttack ? __fx.utils.getEstimatedEliminationAttack(aC, ah.hn[aC] - a7c) : "") && io.fillText(eliminationEstimate, aQM, aQN + 2 * fontSize)
 		}
-		a7c ? (a7c = io.fillStyle, io.fillStyle = aQR(fontSize, 2 + aQO % 2), io.fillText(aQY, aQM, aQN), io.fillStyle = a7c) : aQO >> 1 & 1 ? (io.lineWidth = .05 * fontSize, io.strokeStyle = aQR(fontSize, aQO % 2), io.strokeText(aQY, aQM, aQN)) : (
-			1 < aQO && (io.lineWidth = .12 * fontSize, io.strokeStyle = aQR(fontSize, aQO), io.strokeText(aQY, aQM, aQN)), io.fillText(aQY, aQM, aQN)), drawDensity()
+		a7c ? (em = io.fillStyle, io.fillStyle = aQR(fontSize, 2 + aQO % 2), io.fillText(aQY, aQM, aQN), io.fillStyle = em) : aQO >> 1 & 1 ? (io.lineWidth = .05 * fontSize, io.strokeStyle = aQR(fontSize, aQO % 2), io.strokeText(aQY, aQM, aQN)) : (1 <
+			aQO && (io.lineWidth = .12 * fontSize, io.strokeStyle = aQR(fontSize, aQO), io.strokeText(aQY, aQM, aQN)), io.fillText(aQY, aQM, aQN)), drawDensity()
 	}
 
 	function aQV(aQM, aQN, fontSize, aQZ, aQa, io) {
