@@ -1,5 +1,6 @@
 import { getSettings } from "./settings.js";
-import { getVar } from "./gameInterface.js";
+import { getVar, getUIGap } from "./gameInterface.js";
+import { escapeHtml } from "./utils.js";
 
 // Example usage from game script: __fx.utils.getMaxTroops(...)
 
@@ -10,6 +11,16 @@ function getDensity(playerID, playerBalances = getVar("playerBalances"), playerT
     if (getSettings().densityDisplayStyle === "percentage") return (((playerBalances[playerID] / ((playerTerritories[playerID] === 0 ? 1 : playerTerritories[playerID]) * 150)) * 100).toFixed(1) + "%");
     else return (playerBalances[playerID] / (playerTerritories[playerID] === 0 ? 1 : playerTerritories[playerID])).toFixed(1);
 };
+const estimatedAttackFormatter = new Intl.NumberFormat('en-US', { useGrouping: 'always' });
+function getEstimatedEliminationAttack(playerID, remainingBalance) {
+    if (playerID === getVar("playerId")) return "";
+    const balance = Number.isFinite(remainingBalance)
+        ? Math.max(0, remainingBalance)
+        : getVar("playerBalances")?.[playerID];
+    if (!Number.isFinite(balance) || balance <= 0) return "";
+    // Approximate the attack force as twice the target's current balance; border defense is not included.
+    return `\u2248${estimatedAttackFormatter.format(Math.ceil(balance * 2)).replace(/,/g, ' ')}`;
+}
 function isPointInRectangle(x, y, rectangleStartX, rectangleStartY, width, height) {
     return x >= rectangleStartX && x <= rectangleStartX + width && y >= rectangleStartY && y <= rectangleStartY + height;
 };
@@ -24,8 +35,6 @@ function textStyleBasedOnDensity(playerID) {
 }
 // specific color pallete so two ips dont have a similar looking color
 const duplicateIpColorPalette = [
-    "hsla(0, 85%, 50%, 0.5)",
-    "hsla(18, 85%, 52%, 0.5)",
     "hsla(36, 90%, 52%, 0.5)",
     "hsla(50, 90%, 48%, 0.5)",
     "hsla(72, 70%, 40%, 0.5)",
@@ -43,7 +52,6 @@ const duplicateIpColorPalette = [
     "hsla(300, 75%, 55%, 0.5)",
     "hsla(315, 80%, 58%, 0.5)",
     "hsla(330, 80%, 58%, 0.5)",
-    "hsla(345, 80%, 52%, 0.5)",
 ];
 
 function hashInt(n) {
@@ -103,4 +111,4 @@ function getDuplicateIpHighlightColor(player, entries, ipField) {
     return getIpColors(entries, ipField).get(ip) || null;
 }
 
-export default { getMaxTroops, getDensity, isPointInRectangle, fillTextMultiline, textStyleBasedOnDensity, getDuplicateIpHighlightColor }
+export default { getMaxTroops, getDensity, getEstimatedEliminationAttack, isPointInRectangle, fillTextMultiline, textStyleBasedOnDensity, getDuplicateIpHighlightColor }

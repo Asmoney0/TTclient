@@ -67,7 +67,6 @@ async function patchGameCode() {
 	script = script.replace(/\bS\[(\d+)\]/g, (_match, index) => `"${stringArray[index]}"`);
 
 	const modUtils = new ModUtils(minifyCode(script))
-	const gameVersion = tryParseGameVersion(modUtils)
 	const v = tryParseGameVersion(modUtils)
 	fs.writeFileSync("./build/version.txt", v === null ? "unknown" : `${v.game} ${v.protocol}`)
 
@@ -78,7 +77,7 @@ async function patchGameCode() {
 			str = __L(/* Player: {0} */ [b0.context.truncateAndFillText(playerData.rawPlayerNames[player], b0.qZ.sN(0, 10), 150)]) + "   ";
 			str += __L(/* Strength: {10} */ [b0.rY.formatNumber(playerData.playerBalances[player])]) + "   ";
 			str += __L(/* Territory: {10} */ [b0.rY.formatNumber(playerData.playerTerritories[player])]) + "   ";
-		`, addToDictionary: ["game", "gIsReplay", "playerData", "rawPlayerNames", "playerBalances", "playerTerritories"]
+		`, addToDictionary: ["game", "gIsReplay", "gIsObserver", "playerData", "rawPlayerNames", "playerBalances", "playerTerritories"]
 	}, {
 		code: `this.a = Math.floor(0.066 * b.c);
 			d = b.d - 4 * uiSizes.gap - this.a;`,
@@ -124,7 +123,7 @@ async function patchGameCode() {
 
 	[
 		/=function\((\w+),(\w+),\w+\){\1===(?<game>\w+)\.(?<playerId>\w+)\?\w+\(175," "\+\w+\(\d+,\[(?<playerData>\w+)\.(?<playerNames>\w+)\[\2\]\]\)\+": ",1001,\2,\w+\(/g,
-		/function \w+\(\)\{if\(2===(?<game>\w+)\.(?<gameState>\w+)\)return 1;\w+\.\w+\(\),\1\.\2=2,\1\.\w+=\1.\w+\}/g,
+		/function \w+\(\w+\)\{2!==(?<game>\w+)\.(?<gameState>\w+)&&\(\1\.\2=2,\1\.\w+=\1\.\w+,/g,
 		/(function \w+\((\w+),(?<fontSize>\w+),(?<x>\w+),(?<y>\w+),(?<canvas>\w+)\){)(\6\.fillText\((?<playerData>\w+)\.(?<playerNames>\w+)\[\2\],\4,\5\)),(\2<(?<game>\w+)\.(?<gHumans>\w+)&&2!==\8\.(?<playerStates>\w+)\[[^}]+)}/g,
 		/\w+\.font=(?<fontGeneratorFunction>\w+\.\w+\.\w+)\(1,\.39\*this\.\w+\),/g
 	].forEach(matchDictionaryExpression);
@@ -173,6 +172,7 @@ async function patchGameCode() {
 		"indent_empty_lines": false
 	});
 
+	if (/[ᐅᐊ]/.test(script)) throw new Error("Name markers were left in game.js");
 	fs.writeFileSync("./build/game.js", script);
 	console.log("Wrote ./build/game.js");
 }

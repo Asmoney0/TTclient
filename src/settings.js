@@ -15,8 +15,10 @@ var settings = {
   useFullscreenMode: false,
   hoveringTooltip: true,
   showPlayerDensity: true,
+  showEstimatedEliminationAttack: true,
   coloredDensity: true,
   densityDisplayStyle: "absoluteQuotient",
+  hideBotNames: true,
   keybindButtons: true,
   attackPercentageKeybinds: [],
   startingPercentageEnabled: true,
@@ -28,6 +30,19 @@ var settings = {
 __fx.settings = settings;
 const discontinuedSettings = ["hideAllLinks", "fontName"];
 __fx.makeMainMenuTransparent = false;
+
+async function clearCacheAndReload() {
+  if (!confirm("Clear the cached client files and reload the page?")) return;
+  if ("serviceWorker" in navigator) {
+    const registrations = await navigator.serviceWorker.getRegistrations();
+    await Promise.all(registrations.map(registration => registration.unregister()));
+  }
+  if ("caches" in window) {
+    const keys = await caches.keys();
+    await Promise.all(keys.map(key => caches.delete(key)));
+  }
+  window.location.reload();
+}
 
 // https://stackoverflow.com/a/34156339
 function saveFile(content, fileName, contentType) {
@@ -56,6 +71,7 @@ function StartingPercentageInput(container) {
   const checkmark = document.createElement("span");
   checkmark.className = "checkmark";
   label.append(document.createElement("br"), note, checkbox, checkmark);
+  container.append(label, document.createElement("br"));
 
   const inputRow = document.createElement("div");
   Object.assign(inputRow.style, { display: "none", transition: "none", animation: "none" });
@@ -66,7 +82,8 @@ function StartingPercentageInput(container) {
   input.step = "0.1";
   input.placeholder = "50";
   inputRow.append("Percentage (%): ", input);
-  container.append(document.createElement("br"), inputRow, document.createElement("br"));
+  const spacer = document.createElement("br");
+  container.append(inputRow, spacer);
 
   function updateVisibility() {
     inputRow.style.display = checkbox.checked ? "block" : "none";
@@ -179,6 +196,14 @@ function ReplayHistoryList(container) {
 
 const settingsManager = new (function () {
   const settingsStructure = [
+    SectionHeader("General"),
+    {
+      for: "useFullscreenMode",
+      type: "checkbox",
+      label: "Use fullscreen mode",
+      note: "",
+    },
+    SectionHeader("In-game display"),
     {
       for: "displayWinCounter",
       type: "checkbox",
@@ -196,34 +221,33 @@ const settingsManager = new (function () {
       label: "Display tick number near the balance",
     },
     {
-      for: "useFullscreenMode",
-      type: "checkbox",
-      label: "Use fullscreen mode",
-      note: "",
-    },
-    {
       for: "hoveringTooltip",
       type: "checkbox",
       label: "Hovering tooltip",
       note: "",
     },
+    SectionHeader("Density"),
     {
       for: "showPlayerDensity",
       type: "checkbox",
       label: "Show player density",
     },
     {
-      for: "coloredDensity",
+      for: "showEstimatedEliminationAttack",
       type: "checkbox",
-      label: "Colored density",
+      label: "Show estimated attack size for complete annihilation of a player",
       note: "",
     },
+    SectionHeader("Names"),
+    { for: "hideBotNames", type: "checkbox", label: "Hide bot names" },
+    SectionHeader("Controls"),
     KeybindsInput,
     {
       for: "keybindButtons", type: "checkbox",
       label: "Keybind buttons", note: ""
     },
     StartingPercentageInput,
+    SectionHeader("Replays"),
     {
       for: "showReplayTimebar",
       type: "checkbox",
@@ -237,13 +261,17 @@ const settingsManager = new (function () {
       note: "",
     },
     ReplayHistoryList,
+    SectionHeader("About"),
     function Footer(container) {
       const versionInfo = document.createElement("p");
       versionInfo.innerText = `TT Client v${versionData.version}`;
       const links = document.createElement("p");
       links.innerHTML = `<a href="https://github.com/Asmoney0/TTclient">Github Repository</a> |
         <a href="https://github.com/fxclient/FXclient#readme">Original FX Repository</a>`;
-      container.append(versionInfo, links);
+      const clearCacheButton = document.createElement("button");
+      clearCacheButton.innerText = "Clear cache";
+      clearCacheButton.addEventListener("click", clearCacheAndReload);
+      container.append(versionInfo, links, clearCacheButton);
     }
   ];
   const settingsContainer = document.querySelector(".settings .scrollable");

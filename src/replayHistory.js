@@ -38,8 +38,7 @@ function downloadReplay(replayData, timestamp) {
 function save(replayData) {
   if (!replayData) return;
   const replays = load();
-  // avoid saving an exact duplicate if this fires twice for the same match
-  if (replays.length && replays[replays.length - 1].data === replayData) return;
+  if (replays.some((replay) => replay.data === replayData)) return;
   const timestamp = Date.now();
   replays.push({ data: replayData, timestamp });
   while (replays.length > MAX_REPLAYS) replays.shift();
