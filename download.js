@@ -7,7 +7,7 @@ const downloadGame = () => new Promise(resolve => {
 if (!fs.existsSync("./game")) fs.mkdirSync("./game");
 const file = fs.createWriteStream("./game/latest.html");
 // Download the game's code from the website
-const request = https.get("https://territorial.io", function (response) {
+const request = https.get("https://territorial.io/26", function (response) {
 	// and save it to ./game/latest.html
 	response.pipe(file);
 
